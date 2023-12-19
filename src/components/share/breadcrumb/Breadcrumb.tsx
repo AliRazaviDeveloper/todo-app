@@ -4,7 +4,6 @@ import { NavLink } from "react-router-dom";
 import breadcrumbImg from "../../../assets/image-1.png";
 interface BreadCrumbType {
   subtitle?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   items?: any[];
   title: string;
   children?: JSX.Element;
