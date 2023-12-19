@@ -1,22 +1,24 @@
-import { Typography } from "@mui/material";
 import PageContainer from "../../components/share/pageContainer/PageContainer.tsx";
 import Content from "../../components/share/content/Content.tsx";
 import Breadcrumb from "../../components/share/breadcrumb/Breadcrumb.tsx";
+import { Button } from "@mui/material";
+import MuiTable from "../../components/ui/table/Table.tsx";
+
 const BCrumb = [
   {
     to: "/",
     title: "Home",
   },
   {
-    title: "HomePage",
+    title: "TodoList",
   },
 ];
 const HomePage = () => {
   return (
     <PageContainer>
-      <Breadcrumb title="Home Page" items={BCrumb} />
-      <Content title="Home Page">
-        <Typography>This is a HomePage</Typography>
+      <Breadcrumb title="Todo List Page" items={BCrumb} />
+      <Content title="Todo List Page" action={<Button>Add Todo</Button>}>
+        <MuiTable />
       </Content>
     </PageContainer>
   );
