@@ -1,7 +1,6 @@
 import "./DefaultColor";
 import { Theme } from "@mui/material/styles";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const components: any = (theme: Theme) => {
   return {
     MuiCssBaseline: {
