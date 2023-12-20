@@ -22,7 +22,7 @@ export const useGetTodosQuery = (params?: TParams): TUseGetTodosQuery => {
   const { isError, isLoading, data, isSuccess, refetch, isFetched } = useQuery<
     AxiosResponse<IOutput["data"]["items"]>
   >({
-    queryKey: ["get.todos"],
+    queryKey: ["todos"],
     queryFn: () => getAllTodos(params),
   });
 
