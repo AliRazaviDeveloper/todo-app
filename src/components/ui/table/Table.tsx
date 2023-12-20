@@ -27,9 +27,10 @@ import { useState } from "react";
 import Card from "../card/Card";
 import { useDeleteTodo, useGetTodosQuery } from "../../../services/todo";
 import { STATUS_TODO } from "../../../types/todo";
-import { TbTrash } from "react-icons/tb";
+import { TbPencil, TbTrash } from "react-icons/tb";
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 interface TablePaginationActionsProps {
   count: number;
@@ -105,6 +106,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 
 const MuiTable = () => {
   const { mutateAsync } = useDeleteTodo();
+  const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [search, setSearch] = useState("");
@@ -131,19 +133,30 @@ const MuiTable = () => {
     e.preventDefault();
     setSearch(inputSearch.trim());
   };
-  const handleDeleteTodo = (id: number) => {
-    try {
-      mutateAsync({ id });
-      queryClient.invalidateQueries({
-        queryKey: ["posts"],
-        exact: true,
-        refetchType: "active",
+  const handleDeleteTodo = async (id: number) => {
+    mutateAsync({ id })
+      .then(() => {
+        queryClient.invalidateQueries({
+          queryKey: ["todos"],
+        });
+      })
+      .catch(() => {
+        toast.error("Operation Delete Todo Not Valid");
       });
-    } catch (error) {
-      toast.error("Problem Operation Delete Todo");
+  };
+  const renderStatus = (id: string) => {
+    switch (id) {
+      case "1":
+        return STATUS_TODO.COMPLETE;
+        break;
+      case "2":
+        return STATUS_TODO.DOING;
+        break;
+      default:
+        return STATUS_TODO.PENDING;
+        break;
     }
   };
-
   return (
     <Card title="Todo Table">
       <>
@@ -215,9 +228,9 @@ const MuiTable = () => {
                     <TableCell>
                       <Chip
                         color={
-                          row.status === STATUS_TODO.COMPLETE
+                          row.status === String(1)
                             ? "success"
-                            : row.status === STATUS_TODO.PENDING
+                            : row.status === String(3)
                             ? "warning"
                             : "primary"
                         }
@@ -225,13 +238,18 @@ const MuiTable = () => {
                           borderRadius: "6px",
                         }}
                         size="small"
-                        label={row.status}
+                        label={renderStatus(String(row.status))}
                       />
                     </TableCell>
                     <TableCell align="right">
                       <Tooltip title="Delete Todo">
                         <IconButton onClick={() => handleDeleteTodo(row.id)}>
                           <TbTrash size="18" />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Edit Todo">
+                        <IconButton onClick={() => navigate(`/edit/${row.id}`)}>
+                          <TbPencil size="18" />
                         </IconButton>
                       </Tooltip>
                     </TableCell>
@@ -249,7 +267,7 @@ const MuiTable = () => {
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                   colSpan={6}
-                  count={rows?.length || 1}
+                  count={rows?.length ?? 1}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   onPageChange={handleChangePage}

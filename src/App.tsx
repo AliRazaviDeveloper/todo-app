@@ -11,17 +11,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 const App = (): JSX.Element => {
   const routing = useRoutes(Router);
   const theme = ThemeSettings();
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        refetchOnWindowFocus: true,
-        refetchOnReconnect: true,
-        refetchIntervalInBackground: true,
-        refetchOnMount: true,
-        refetchInterval: 5000,
-      },
-    },
-  });
+  const queryClient = new QueryClient();
 
   return (
     <QueryClientProvider client={queryClient}>

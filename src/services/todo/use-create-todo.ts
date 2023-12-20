@@ -1,13 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import api from "../../utility/server";
-import { ITodos, STATUS_TODO } from "../../types/todo";
+import { ITodos } from "../../types/todo";
 
 export type TCreateFormTodo = {
   title: string;
   description: string;
   date?: string;
-  status?: STATUS_TODO;
+  status?: number;
 };
 
 const createTodo = (data: TCreateFormTodo) => {
@@ -15,7 +15,7 @@ const createTodo = (data: TCreateFormTodo) => {
   formData.append("title", data.title);
   formData.append("description", data.description);
   formData.append("date", new Date().toISOString());
-  formData.append("status", STATUS_TODO.PENDING);
+  formData.append("status", String(3));
   return api.post("/todos", formData);
 };
 
