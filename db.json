@@ -1,3 +1,11 @@
 {
-  "todos": []
+  "todos": [
+    {
+      "title": "this is new todo",
+      "description": "test todo",
+      "date": "2023-12-20T00:01:40.912Z",
+      "status": "PENDING",
+      "id": 1
+    }
+  ]
 }
