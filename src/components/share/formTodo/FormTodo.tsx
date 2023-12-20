@@ -5,11 +5,20 @@ import toast from "react-hot-toast";
 import { useCreateTodo } from "../../../services/todo";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
 export type FormData = {
   title: string;
   description: string;
   status?: STATUS_TODO;
 };
+const schema = yup
+  .object({
+    title: yup.string().required(),
+    description: yup.string().required(),
+  })
+  .required();
 type FormDataProps = {
   isEdit?: boolean;
 };
@@ -22,7 +31,9 @@ const FormTodo = (props: FormDataProps) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormData>({
+    resolver: yupResolver(schema),
+  });
   const onSubmit: SubmitHandler<FormData> = (data) => {
     try {
       mutateAsync({
@@ -49,7 +60,7 @@ const FormTodo = (props: FormDataProps) => {
               fullWidth
               {...register("title")}
             />
-            <p>{errors.title?.message}</p>
+            <Box sx={{ color: "red" }}>{errors.title?.message}</Box>
           </Grid>
           <Grid item xs={12} lg={12}>
             <FormLabel>description</FormLabel>
@@ -62,7 +73,7 @@ const FormTodo = (props: FormDataProps) => {
               fullWidth
               {...register("description")}
             />
-            <p>{errors.description?.message}</p>
+            <Box sx={{ color: "red" }}>{errors.title?.message}</Box>
           </Grid>
 
           <Grid item xs={12} lg={12}>
